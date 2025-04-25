@@ -146,7 +146,7 @@ class SamPredictor:
         if box is not None:
             box = self.transform.apply_boxes(box, self.original_size)
             box_torch = torch.as_tensor(box, dtype=torch.float, device=self.device)
-            box_torch = box_torch[None, :]
+            # box_torch = box_torch[None, :] 
         if mask_input is not None:
             mask_input_torch = torch.as_tensor(mask_input, dtype=torch.float, device=self.device)
             mask_input_torch = mask_input_torch[None, :, :, :]
@@ -160,9 +160,10 @@ class SamPredictor:
             return_logits=return_logits,
         )
 
-        masks_np = masks[0].detach().cpu().numpy()
-        iou_predictions_np = iou_predictions[0].detach().cpu().numpy()
-        low_res_masks_np = low_res_masks[0].detach().cpu().numpy()
+        masks_np = masks.detach().cpu().numpy()
+        iou_predictions_np = iou_predictions.detach().cpu().numpy()
+        low_res_masks_np = low_res_masks.detach().cpu().numpy()
+
         return masks_np, iou_predictions_np, low_res_masks_np
 
     @torch.no_grad()
